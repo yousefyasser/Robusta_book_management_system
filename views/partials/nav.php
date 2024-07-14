@@ -10,7 +10,7 @@
         <div class="flex-grow flex justify-center">
             <nav class="flex space-x-7">
                 <a href="/" class="text-gray-600 hover:text-blue-600">Home</a>
-                <a href="#" class="text-gray-600 hover:text-blue-600">Library</a>
+                <a href="/books" class="text-gray-600 hover:text-blue-600">Library</a>
                 <a href="#" class="text-gray-600 hover:text-blue-600">About</a>
             </nav>
         </div>
