@@ -1,5 +1,5 @@
-<?php require(BASE_PATH . 'views/partials/header.php'); ?>
-<?php require(BASE_PATH . 'views/partials/nav.php'); ?>
+<?php require(base_path('views/partials/header.php')); ?>
+<?php require(base_path('views/partials/nav.php')); ?>
 
 <!-- Main Content -->
 <main class="flex-grow">
@@ -20,4 +20,4 @@
 </main>
 
 
-<?php require(BASE_PATH . 'views/partials/footer.php'); ?>
+<?php require(base_path('views/partials/footer.php')); ?>
