@@ -46,4 +46,9 @@ class Router
 
         die();
     }
+
+    public static function redirect($uri)
+    {
+        header("location: {$uri}");
+    }
 }

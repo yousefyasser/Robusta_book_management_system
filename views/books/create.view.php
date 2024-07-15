@@ -5,7 +5,7 @@
     <section class="py-20">
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-bold mb-12">Add New Book</h2>
-            <form action="/books/store" method="POST" enctype="multipart/form-data" class="bg-white w-full max-w-lg mx-auto p-8 rounded-lg shadow-lg">
+            <form action="/books" method="POST" enctype="multipart/form-data" class="bg-white w-full max-w-lg mx-auto p-8 rounded-lg shadow-lg">
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
                     <input type="text" name="title" id="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>

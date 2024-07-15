@@ -1,10 +1,12 @@
 <?php
 
-function dd($var)
+function dd($vars)
 {
-    echo "<pre>";
-    var_dump($var);
-    echo "</pre>";
+    foreach ($vars as $var) {
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
     die();
 }
 
