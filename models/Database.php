@@ -31,4 +31,10 @@ class Database
     {
         return $this->statement->fetchAll();
     }
+
+    public static function setup()
+    {
+        $dbConfig = require(base_path('config.php'));
+        return (new Database($dbConfig['db'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']));
+    }
 }
