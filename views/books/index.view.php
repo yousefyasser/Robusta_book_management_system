@@ -8,6 +8,13 @@
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-bold mb-12">Your Books</h2>
             <div class="grid grid-cols-1 md:grid-cols-6 gap-5">
+                <!-- Add New Book Item -->
+                <div class="bg-white w-80 h-80 p-6 ml-10 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center">
+                    <div class="flex flex-col items-center justify-center">
+                        <a href="/books/create" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">+ Add New Book</a>
+                    </div>
+                </div>
+
                 <?php foreach ($books as $book) : ?>
                     <!-- Book Item -->
                     <div class="bg-white w-80 p-6 ml-10 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -19,14 +26,7 @@
                             <a href=<?= '/book?id=' . $book['id'] ?> class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Show more</a>
                         </div>
                     </div>
-
                 <?php endforeach; ?>
-                <!-- Add New Book Item -->
-                <div class="bg-white w-80 p-6 ml-10 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center">
-                    <div class="flex flex-col items-center justify-center">
-                        <a href="/books/create" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">+ Add New Book</a>
-                    </div>
-                </div>
             </div>
         </div>
     </section>

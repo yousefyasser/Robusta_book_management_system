@@ -1,9 +1,15 @@
 <?php
 
+use core\Validator;
 use core\Router;
 use models\Database;
 
-// TODO: validate all input
+// validate the form data
+
+$errors = Validator::get_validation_errors();
+if (!empty($errors)) {
+    return require(base_path('views/books/create.view.php'));
+}
 
 // create empty folder for uploads if not found
 

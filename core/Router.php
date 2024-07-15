@@ -50,5 +50,6 @@ class Router
     public static function redirect($uri)
     {
         header("location: {$uri}");
+        die();
     }
 }
