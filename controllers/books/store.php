@@ -8,6 +8,7 @@ use models\Database;
 
 $errors = Validator::get_validation_errors();
 if (!empty($errors)) {
+    $heading = 'create';
     return require(base_path('views/books/create.view.php'));
 }
 

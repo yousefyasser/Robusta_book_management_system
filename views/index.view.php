@@ -6,7 +6,7 @@
     <div class="container mx-auto text-center">
         <h1 class="text-5xl font-bold mb-6">Manage Your Book Collection with Ease</h1>
         <p class="text-lg mb-8">Our book management system helps you to track and organize your personal or professional book collection efficiently.</p>
-        <a href="#" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold">Get Started</a>
+        <a href="/books" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold">Get Started</a>
     </div>
 </section>
 

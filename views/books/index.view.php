@@ -9,7 +9,7 @@
             <h2 class="text-4xl font-bold mb-12">Your Books</h2>
             <div class="grid grid-cols-1 md:grid-cols-6 gap-5">
                 <!-- Add New Book Item -->
-                <div class="bg-white w-80 h-80 p-6 ml-10 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center">
+                <div class="bg-white w-80 p-6 m-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center">
                     <div class="flex flex-col items-center justify-center">
                         <a href="/books/create" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">+ Add New Book</a>
                     </div>
@@ -17,9 +17,9 @@
 
                 <?php foreach ($books as $book) : ?>
                     <!-- Book Item -->
-                    <div class="bg-white w-80 p-6 ml-10 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-white w-80 p-6 m-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                         <div class="flex flex-col items-center">
-                            <img src="<?= $book['cover_image'] ?? "https://via.placeholder.com/50x75" ?>" alt="Book Cover" class="w-48 h-58 object-cover rounded">
+                            <img src="<?= valid_path($book['cover_image']) ? $book['cover_image'] : "https://via.placeholder.com/50x75" ?>" alt="Book Cover" class="w-60 h-48 object-cover rounded">
                             <h3 class="text-2xl font-semibold mt-4 mb-2 text-gray-800"><?= $book['title'] ?></h3>
                             <p class="text-gray-600 mb-1"><?= $book['author'] ?></p>
                             <p class="text-gray-500 text-sm mb-5"><?= $book['publishing_date'] ?></p>
