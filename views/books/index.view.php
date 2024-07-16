@@ -23,7 +23,10 @@
                             <h3 class="text-2xl font-semibold mt-4 mb-2 text-gray-800"><?= $book['title'] ?></h3>
                             <p class="text-gray-600 mb-1"><?= $book['author'] ?></p>
                             <p class="text-gray-500 text-sm mb-5"><?= $book['publishing_date'] ?></p>
-                            <a href=<?= '/book?id=' . $book['id'] ?> class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Show more</a>
+                            <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                                <a href=<?= '/book?id=' . $book['id'] ?> class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Show more</a>
+                                <a href=<?= '/book/edit?id=' . $book['id'] ?> class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Edit</a>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
