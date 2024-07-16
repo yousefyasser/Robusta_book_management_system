@@ -20,9 +20,7 @@ if (!is_dir(base_path('public/uploads'))) {
 
 // move uploaded file to uploads folder
 
-$srcPath = $_FILES['cover_image']['tmp_name'];
-$dstPath = base_path('public/uploads/' . $_FILES['cover_image']['name']);
-move_uploaded_file($srcPath, $dstPath);
+$dstPath = move_file();
 
 // store the uploaded image path (in public/uploads) in the database
 
@@ -32,7 +30,7 @@ $db->query('INSERT INTO books (title, author, publishing_date, cover_image, summ
     'title' => $_POST['title'],
     'author' => $_POST['author'],
     'publishing_date' => $_POST['publishing_date'],
-    'cover_image' => '/uploads/' . $_FILES['cover_image']['name'],
+    'cover_image' => $dstPath,
     'summary' => $_POST['summary']
 ]);
 

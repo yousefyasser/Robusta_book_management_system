@@ -2,7 +2,12 @@
     <section class="py-20">
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-bold mb-12"><?= $heading ?> Book</h2>
-            <form action="/books/<?= $uri ?>" method="POST" enctype="multipart/form-data" class="bg-white w-full max-w-lg mx-auto p-8 rounded-lg shadow-lg">
+            <form action="<?= $uri ?>" method="POST" enctype="multipart/form-data" class="bg-white w-full max-w-lg mx-auto p-8 rounded-lg shadow-lg">
+                <?php if ($heading === 'Edit') : ?>
+                    <input type="hidden" name="_method" value="PATCH">
+                    <input type="hidden" name="id" value="<?= $book['id'] ?>">
+                <?php endif; ?>
+
                 <?php foreach (['title', 'author', 'publishing_date', 'cover_image'] as $field) : ?>
                     <div class="mb-4">
                         <label for="<?= $field ?>" class="block text-gray-700 text-sm font-bold mb-2"><?= $field ?></label>

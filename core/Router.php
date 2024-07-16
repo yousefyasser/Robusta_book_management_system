@@ -27,6 +27,11 @@ class Router
         return $this->add('POST', $uri, $controller);
     }
 
+    public function patch($uri, $controller)
+    {
+        return $this->add('PATCH', $uri, $controller);
+    }
+
     public function route($uri, $method)
     {
         foreach ($this->routes as $route) {

@@ -28,12 +28,16 @@ class Validator
         $errors = [];
 
         // Date validation
-        if (strtotime($_POST['publishing_date']) > time()) {
-            $errors['publishing_date'] = 'The publishing date cannot be in the future.';
+        if (Validator::validate_date($_POST['publishing_date'])) {
+            $errors['publishing_date'] = 'Invalid publishing date.';
         }
 
         // Range validation
         foreach ($_POST as $field => $value) {
+            if (!array_key_exists($field, Validator::RULES)) {
+                continue;
+            }
+
             $fieldRules = Validator::RULES[$field];
 
             if (Validator::validate_range($fieldRules, $value)) {
@@ -42,11 +46,18 @@ class Validator
         }
 
         // File validation
-        if (!Validator::validate_file('cover_image')) {
-            $errors['cover_image'] = "The cover image must be a valid image file.";
+        $fileErrors = Validator::get_file_errors('cover_image');
+        if ($fileErrors) {
+            $errors['cover_image'] = $fileErrors;
         }
 
         return $errors;
+    }
+
+    // checks if the date is in the future or not in the correct format
+    private static function validate_date($date)
+    {
+        return empty($date) || (strtotime($date) > time()) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $date);
     }
 
     private static function validate_range($fieldRules, $value)
@@ -57,11 +68,23 @@ class Validator
         return $belowMin || $aboveMax;
     }
 
-    private static function validate_file($file)
+    private static function get_file_errors($file)
     {
+        $error_type = [
+            "The uploaded file exceeds the upload_max_filesize directive in php.ini.",
+            "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.",
+            "The uploaded file was only partially uploaded.",
+            "No file was uploaded.",
+            "The cover image must be a valid image file."
+        ];
+
+        if ($_FILES[$file]['error'] > 0) {
+            return $error_type[$_FILES[$file]['error'] - 1];
+        }
+
         $fileType = $_FILES[$file]['type'];
         $allowedFormats = Validator::RULES[$file]['format'];
 
-        return in_array($fileType, $allowedFormats);
+        return !in_array($fileType, $allowedFormats) ? $error_type[4] : null;
     }
 }
