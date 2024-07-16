@@ -18,7 +18,6 @@ class Validator
             'format' => ['image/jpeg', 'image/png', 'image/gif', 'image/bmp']
         ],
         'summary' => [
-            'min' => 10,
             'max' => 1000
         ]
     ];
@@ -74,10 +73,12 @@ class Validator
             "The uploaded file exceeds the upload_max_filesize directive in php.ini.",
             "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.",
             "The uploaded file was only partially uploaded.",
-            "No file was uploaded.",
             "The cover image must be a valid image file."
         ];
 
+        if ($_FILES[$file]['error'] === 4) {
+            return null;
+        }
         if ($_FILES[$file]['error'] > 0) {
             return $error_type[$_FILES[$file]['error'] - 1];
         }

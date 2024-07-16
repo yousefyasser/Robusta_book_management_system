@@ -20,7 +20,7 @@ if (!is_dir(base_path('public/uploads'))) {
 
 // move uploaded file to uploads folder
 
-$dstPath = move_file();
+$dstPath = !empty($_FILES['cover_image']['name']) ? move_file() : NULL;
 
 // store the uploaded image path (in public/uploads) in the database
 
