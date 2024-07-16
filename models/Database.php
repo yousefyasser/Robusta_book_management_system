@@ -2,6 +2,7 @@
 
 namespace models;
 
+use core\Router;
 use PDO;
 
 class Database
@@ -30,6 +31,16 @@ class Database
     public function get()
     {
         return $this->statement->fetchAll();
+    }
+
+    public function fetchOrFail()
+    {
+        $item = $this->statement->fetch();
+        if (!$item) {
+            Router::abort();
+        }
+
+        return $item;
     }
 
     public static function setup()
