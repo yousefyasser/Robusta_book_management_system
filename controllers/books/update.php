@@ -10,7 +10,14 @@ if (!empty($errors)) {
     return require(base_path('controllers/books/edit.php'));
 }
 
-$dstPath = !empty($_FILES['cover_image']['name']) ? move_file() : NULL;
+$dstPath = NULL;
+if (!empty($_FILES['cover_image']['name'])) {
+    if (!is_dir(base_path("public/uploads"))) {
+        mkdir(base_path("public/uploads"));
+    }
+
+    $dstPath = move_file();
+}
 
 $db = Database::setup();
 $db->query("UPDATE books SET title = :title, author = :author, publishing_date = :publishing_date, cover_image = :cover_image, summary = :summary WHERE id = :id", [
