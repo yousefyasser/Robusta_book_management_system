@@ -86,6 +86,6 @@ class Validator
         $fileType = $_FILES[$file]['type'];
         $allowedFormats = Validator::RULES[$file]['format'];
 
-        return !in_array($fileType, $allowedFormats) ? $error_type[4] : null;
+        return !in_array($fileType, $allowedFormats) ? $error_type[array_key_last($error_type)] : null;
     }
 }
