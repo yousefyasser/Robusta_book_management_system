@@ -5,9 +5,13 @@ use core\Router;
 
 // validate id actually exists
 $db = Database::setup();
-$db->query("SELECT * FROM books WHERE id = :id", [
+$coverImagePath = $db->query("SELECT cover_image FROM books WHERE id = :id", [
     "id" => $_POST['id']
 ])->fetchOrFail();
+
+if (valid_path($coverImagePath['cover_image'])) {
+    unlink(base_path("public{$coverImagePath['cover_image']}"));
+}
 
 // delete row from database
 $db->query("DELETE FROM books WHERE id = :id", [

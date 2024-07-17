@@ -21,7 +21,7 @@
                                 <form action="/book" method="POST">
                                     <input type="hidden" name="_method" value="DELETE" />
                                     <input type="hidden" name="id" value="<?= $book['id'] ?>" />
-                                    <button type="submit" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this book?');" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
                                 </form>
                             </div>
                         </div>
