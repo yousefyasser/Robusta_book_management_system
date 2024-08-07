@@ -2,50 +2,29 @@
 
 namespace models;
 
-use core\Router;
-use PDO;
+use models\factories\DatabaseFactory;
+use models\factories\MysqlFactory;
+use Exception;
 
 class Database
 {
-    public $connection;
-    public $statement;
+    private $adapter;
 
-    public function __construct($config, $username = 'root', $password = '')
+    public function __construct(DatabaseFactory $factory)
     {
-        $dsn = 'mysql:' . http_build_query($config, '', ';');
-
-        $this->connection = new PDO($dsn, $username, $password, [
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]);
-    }
-
-    public function query($query, $params = [])
-    {
-        $this->statement = $this->connection->prepare($query);
-
-        $this->statement->execute($params);
-
-        return $this;
-    }
-
-    public function get()
-    {
-        return $this->statement->fetchAll();
-    }
-
-    public function fetchOrFail()
-    {
-        $item = $this->statement->fetch();
-        if (!$item) {
-            Router::abort();
-        }
-
-        return $item;
+        $this->adapter = $factory->create_adapter();
     }
 
     public static function setup()
     {
-        $dbConfig = require(base_path('config.php'));
-        return (new Database($dbConfig['db'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']));
+        switch ($_ENV['DB_CONNECTION']) {
+            case 'mysql':
+                $dbFactory = new MysqlFactory();
+                break;
+            default:
+                throw new Exception('Database connection not supported');
+        }
+
+        return (new Database($dbFactory))->adapter;
     }
 }
