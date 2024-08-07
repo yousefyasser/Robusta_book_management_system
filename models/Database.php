@@ -3,6 +3,7 @@
 namespace models;
 
 use models\factories\DatabaseFactory;
+use models\factories\MongodbFactory;
 use models\factories\MysqlFactory;
 use Exception;
 
@@ -25,6 +26,9 @@ class Database
         switch ($_ENV['DB_CONNECTION']) {
             case 'mysql':
                 $dbFactory = new MysqlFactory();
+                break;
+            case 'mongodb':
+                $dbFactory = new MongodbFactory();
                 break;
             default:
                 throw new Exception('Database connection not supported');

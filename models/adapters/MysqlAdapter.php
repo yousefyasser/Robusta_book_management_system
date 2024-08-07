@@ -25,7 +25,7 @@ class MysqlAdapter implements DatabaseAdapter
     {
         if (!self::$instance) {
             $dbConfig = require(base_path('config.php'));
-            self::$instance = new MysqlAdapter($dbConfig['db'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+            self::$instance = new self($dbConfig['db'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
         }
 
         return self::$instance;
@@ -65,7 +65,7 @@ class MysqlAdapter implements DatabaseAdapter
 
     public function create($data)
     {
-        $this->query("INSERT INTO books (title, author, publishing_date, cover_image, summary) 
+        $this->query("INSERT INTO {$this->table} (title, author, publishing_date, cover_image, summary) 
                       VALUES (:title, :author, :publishing_date, :cover_image, :summary)", $data);
     }
 
