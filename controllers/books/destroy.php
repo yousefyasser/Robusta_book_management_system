@@ -10,7 +10,7 @@ $coverImagePath = $db->query("SELECT cover_image FROM books WHERE id = :id", [
 ])->fetchOrFail();
 
 if (valid_path($coverImagePath['cover_image'])) {
-    unlink(base_path("public{$coverImagePath['cover_image']}"));
+    unlink(base_path("public/{$coverImagePath['cover_image']}"));
 }
 
 // delete row from database
