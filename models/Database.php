@@ -15,6 +15,11 @@ class Database
         $this->adapter = $factory->create_adapter();
     }
 
+    public static function table($table)
+    {
+        return self::setup()::table($table);
+    }
+
     public static function setup()
     {
         switch ($_ENV['DB_CONNECTION']) {

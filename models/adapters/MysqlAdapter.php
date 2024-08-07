@@ -3,11 +3,14 @@
 namespace models\adapters;
 
 use PDO;
+use core\Router;
 
 class MysqlAdapter implements DatabaseAdapter
 {
-    public static $instance;
-    public $connection;
+    private static $instance;
+    private $connection;
+    private $statement;
+    protected $table;
 
     private function __construct($config, $username = 'root', $password = '')
     {
@@ -28,24 +31,55 @@ class MysqlAdapter implements DatabaseAdapter
         return self::$instance;
     }
 
-    public function findAll()
+    public function query($query, $params = [])
     {
-        return $this->connection->query('SELECT * FROM books')->fetchAll();
+        $this->statement = $this->connection->prepare($query);
+        $this->statement->execute($params);
+        return $this;
     }
 
-    public function find($id)
+    public static function table($table)
     {
+        $instance = self::get_instance();
+        $instance->table = $table;
+        return $instance;
+    }
+
+    public function findAll()
+    {
+        return $this->query("SELECT * FROM {$this->table}")->statement->fetchAll();
+    }
+
+    public function find($id, $fail = false)
+    {
+        $result = $this->query("SELECT * FROM {$this->table} WHERE id = :id", [
+            'id' => $id
+        ])->statement->fetch();
+
+        if (!$result && $fail) {
+            Router::abort();
+        }
+
+        return $result;
     }
 
     public function create($data)
     {
+        $this->query("INSERT INTO books (title, author, publishing_date, cover_image, summary) 
+                      VALUES (:title, :author, :publishing_date, :cover_image, :summary)", $data);
     }
 
     public function update($id, $data)
     {
+        $this->query("UPDATE {$this->table} 
+                      SET title = :title, author = :author, publishing_date = :publishing_date, cover_image = :cover_image, summary = :summary 
+                      WHERE id = :id", $data);
     }
 
     public function delete($id)
     {
+        $this->query("DELETE FROM {$this->table} WHERE id = :id", [
+            'id' => $id
+        ]);
     }
 }

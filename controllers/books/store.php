@@ -22,17 +22,14 @@ if (!is_dir(base_path('public/uploads'))) {
 
 $dstPath = !empty($_FILES['cover_image']['name']) ? move_file() : NULL;
 
-// store the uploaded image path (in public/uploads) in the database
-
-$db = Database::setup();
-$db->query('INSERT INTO books (title, author, publishing_date, cover_image, summary) 
-            VALUES (:title, :author, :publishing_date, :cover_image, :summary)', [
+$newBookData = [
     'title' => $_POST['title'],
     'author' => $_POST['author'],
     'publishing_date' => $_POST['publishing_date'],
     'cover_image' => $dstPath,
     'summary' => $_POST['summary']
-]);
+];
 
+Database::table('books')->create($newBookData);
 
 Router::redirect('/books');
