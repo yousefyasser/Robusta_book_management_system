@@ -17,7 +17,7 @@ if (!is_dir(base_path("public/uploads"))) {
 $dstPath = move_file();
 
 // Remove old cover image
-$oldCoverImagePath = Database::table('books')->find($_POST['id'], true);
+$oldCoverImagePath = Database::get_book_repository()->find($_POST['id'], true);
 
 if (valid_path($oldCoverImagePath['cover_image'])) {
     unlink(base_path("public/{$oldCoverImagePath['cover_image']}"));
@@ -33,6 +33,6 @@ $updatedBook = [
     "summary" => $_POST['summary']
 ];
 
-Database::table('books')->update($updatedBook['id'], $updatedBook);
+Database::get_book_repository()->update($updatedBook['id'], $updatedBook);
 
 Router::redirect('/books');

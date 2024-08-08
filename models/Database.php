@@ -2,26 +2,18 @@
 
 namespace models;
 
-use models\factories\DatabaseFactory;
 use models\factories\MongodbFactory;
 use models\factories\MysqlFactory;
 use Exception;
 
 class Database
 {
-    private $adapter;
-
-    public function __construct(DatabaseFactory $factory)
+    public static function get_book_repository()
     {
-        $this->adapter = $factory->create_adapter();
+        return self::get_factory()->create_book_repository();
     }
 
-    public static function table($table)
-    {
-        return self::setup()::table($table);
-    }
-
-    public static function setup()
+    private static function get_factory()
     {
         switch ($_ENV['DB_CONNECTION']) {
             case 'mysql':
@@ -34,6 +26,6 @@ class Database
                 throw new Exception('Database connection not supported');
         }
 
-        return (new Database($dbFactory))->adapter;
+        return $dbFactory;
     }
 }

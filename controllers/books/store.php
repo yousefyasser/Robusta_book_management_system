@@ -30,6 +30,6 @@ $newBookData = [
     'summary' => $_POST['summary']
 ];
 
-Database::table('books')->create($newBookData);
+Database::get_book_repository()->create($newBookData);
 
 Router::redirect('/books');

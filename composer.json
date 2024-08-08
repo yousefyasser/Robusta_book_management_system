@@ -5,9 +5,7 @@
   "autoload": {
     "psr-4": {
       "core\\": "core/",
-      "models\\": "models/",
-      "models\\factories\\": "models/factories/",
-      "models\\adapters\\": "models/adapters/"
+      "models\\": "models/"
     }
   },
   "require-dev": {
