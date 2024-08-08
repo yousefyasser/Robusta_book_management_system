@@ -12,7 +12,7 @@ class MongodbFactory implements DatabaseFactory
 
     public function create_book_repository(): BookRepository
     {
-        return new BookRepository($this->create_adapter());
+        return BookRepository::get_instance($this->create_adapter());
     }
 
     public function create_book_history_repository(): BookHistoryRepository

@@ -31,20 +31,15 @@ class MongodbAdapter implements DatabaseAdapter
         return self::$instance;
     }
 
-    public static function table($collection)
+    public function findAll($table)
     {
-        $instance = self::get_instance();
-        $instance->collection = $instance->connection->selectCollection($collection);
-        return $instance;
-    }
-
-    public function findAll()
-    {
+        $this->connection->selectCollection($table);
         return $this->collection->find();
     }
 
-    public function find($id, $fail = false)
+    public function find($table, $id, $fail = false)
     {
+        $this->connection->selectCollection($table);
         $result = $this->collection->findOne(['id' => $id]);
 
         if (!$result && $fail) {
@@ -54,18 +49,21 @@ class MongodbAdapter implements DatabaseAdapter
         return $result;
     }
 
-    public function create($data)
+    public function create($table, $data)
     {
+        $this->connection->selectCollection($table);
         $this->collection->insertOne($data);
     }
 
-    public function update($id, $data)
+    public function update($table, $id, $data)
     {
+        $this->connection->selectCollection($table);
         $this->collection->updateOne(['id' => $id], ['$set' => $data]);
     }
 
-    public function delete($id)
+    public function delete($table, $id)
     {
+        $this->connection->selectCollection($table);
         $this->collection->deleteOne(['id' => $id]);
     }
 }

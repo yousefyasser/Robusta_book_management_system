@@ -10,7 +10,6 @@ class MysqlAdapter implements DatabaseAdapter
     private static $instance;
     private $connection;
     private $statement;
-    protected $table;
 
     private function __construct($config, $username = 'root', $password = '')
     {
@@ -45,24 +44,21 @@ class MysqlAdapter implements DatabaseAdapter
         return $instance;
     }
 
-    public function findAll(array $conditions = [])
+    public function findAll($table, array $conditions = [])
     {
         $where = '';
 
         // If there are conditions, build the WHERE clause
         if (!empty($conditions)) {
-            $where = 'WHERE ' .
-                implode(' AND ', array_map(function ($key) {
-                    return "$key = :$key";
-                }, array_keys($conditions)));
+            $where = 'WHERE ' . query_formatter(' AND ', $conditions);
         }
 
-        return $this->query("SELECT * FROM {$this->table} {$where}", $conditions)->statement->fetchAll();
+        return $this->query("SELECT * FROM {$table} {$where}", $conditions)->statement->fetchAll();
     }
 
-    public function find($id, $fail = false)
+    public function find($table, $id, $fail = false)
     {
-        $result = $this->query("SELECT * FROM {$this->table} WHERE id = :id", [
+        $result = $this->query("SELECT * FROM {$table} WHERE id = :id", [
             'id' => $id
         ])->statement->fetch();
 
@@ -73,22 +69,29 @@ class MysqlAdapter implements DatabaseAdapter
         return $result;
     }
 
-    public function create($data)
+    public function create($table, $data)
     {
-        $this->query("INSERT INTO {$this->table} (title, author, publishing_date, cover_image, summary) 
-                      VALUES (:title, :author, :publishing_date, :cover_image, :summary)", $data);
+        $fields = implode(', ', array_keys($data));
+        $values = ":" . implode(', :', array_keys($data));
+
+        $this->query("INSERT INTO {$table} ({$fields}) 
+                      VALUES ({$values})", $data);
     }
 
-    public function update($id, $data)
+    public function update($table, $id, $data)
     {
-        $this->query("UPDATE {$this->table} 
-                      SET title = :title, author = :author, publishing_date = :publishing_date, cover_image = :cover_image, summary = :summary 
+        $dataWithoutId = $data;
+        unset($dataWithoutId['id']);
+        $columns = query_formatter(', ', $dataWithoutId);
+
+        $this->query("UPDATE {$table} 
+                      SET {$columns} 
                       WHERE id = :id", $data);
     }
 
-    public function delete($id)
+    public function delete($table, $id)
     {
-        $this->query("DELETE FROM {$this->table} WHERE id = :id", [
+        $this->query("DELETE FROM {$table} WHERE id = :id", [
             'id' => $id
         ]);
     }

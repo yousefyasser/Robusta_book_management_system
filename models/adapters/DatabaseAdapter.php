@@ -5,10 +5,9 @@ namespace models\adapters;
 interface DatabaseAdapter
 {
     public static function get_instance();
-    public static function table($table);
-    public function findAll();
-    public function find($id);
-    public function create($data);
-    public function update($id, $data);
-    public function delete($id);
+    public function findAll($table);
+    public function find($table, $id);
+    public function create($table, $data);
+    public function update($table, $id, $data);
+    public function delete($table, $id);
 }

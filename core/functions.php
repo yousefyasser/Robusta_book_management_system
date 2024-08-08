@@ -22,6 +22,13 @@ function move_file()
     return $dstPath;
 }
 
+function query_formatter($separator, $arr)
+{
+    return implode($separator, array_map(function ($key) {
+        return "$key = :$key";
+    }, array_keys($arr)));
+}
+
 function valid_path($path)
 {
     return !empty($path) && file_exists(base_path("public/{$path}"));
