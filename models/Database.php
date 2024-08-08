@@ -13,6 +13,11 @@ class Database
         return self::get_factory()->create_book_repository();
     }
 
+    public static function get_book_history_repository()
+    {
+        return self::get_factory()->create_book_history_repository();
+    }
+
     private static function get_factory()
     {
         switch ($_ENV['DB_CONNECTION']) {

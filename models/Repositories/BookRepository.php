@@ -10,8 +10,7 @@ class BookRepository
 
     public function __construct(DatabaseAdapter $adapter)
     {
-        $this->adapter = $adapter;
-        $this->adapter->table('books');
+        $this->adapter = $adapter->table('books');
     }
 
     public function get_books()
