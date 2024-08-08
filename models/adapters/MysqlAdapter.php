@@ -44,16 +44,21 @@ class MysqlAdapter implements DatabaseAdapter
         return $instance;
     }
 
-    public function findAll($table, array $conditions = [])
+    public function findAll($table, array $conditions = [], $orderBy = '')
     {
         $where = '';
+        $order = '';
 
         // If there are conditions, build the WHERE clause
         if (!empty($conditions)) {
             $where = 'WHERE ' . query_formatter(' AND ', $conditions);
         }
 
-        return $this->query("SELECT * FROM {$table} {$where}", $conditions)->statement->fetchAll();
+        if (!empty($orderBy)) {
+            $order = 'ORDER BY ' . $orderBy;
+        }
+
+        return $this->query("SELECT * FROM {$table} {$where} {$order}", $conditions)->statement->fetchAll();
     }
 
     public function find($table, $id, $fail = false)

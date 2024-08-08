@@ -16,7 +16,7 @@ class BookHistoryRepository implements BookSubscriber
 
     public function get_book_history($book_id)
     {
-        return $this->adapter->findAll(['book_id' => $book_id]);
+        return $this->adapter->findAll($this->table, ['book_id' => $book_id], 'updated_at DESC');
     }
 
     public function update_history($oldBook)
