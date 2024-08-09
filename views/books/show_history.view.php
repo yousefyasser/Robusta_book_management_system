@@ -16,6 +16,12 @@
                         <p class="text-gray-600 mt-4">Summary: <?= htmlspecialchars($history['summary']) ?></p>
                     </div>
                 <?php endforeach; ?>
+                <?php if (empty($historyData)): ?>
+                    <div class="p-4 border
+                        border-gray-200 rounded-lg bg-gray-50 text-center text-gray-700">
+                        No history found for this book.
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="flex justify-end p-4 border-t">
                 <a href="/book?id=<?= $book['id'] ?>" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-all duration-300">Close</a>

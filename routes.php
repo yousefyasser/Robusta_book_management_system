@@ -1,15 +1,17 @@
 <?php
 
+use \controllers\BookController;
+
 $router->get('/', 'index.php');
 
-$router->get('/books', 'books/index.php');
+$router->get('/books', [BookController::class, 'index']);
 
-$router->get('/books/create', 'books/create.php');
-$router->post('/books/create', 'books/store.php');
+$router->get('/book', [BookController::class, 'show']);
 
-$router->get('/book', 'books/show.php');
+$router->get('/books/create', [BookController::class, 'create']);
+$router->post('/books/create', [BookController::class, 'store']);
 
-$router->get('/book/edit', 'books/edit.php');
-$router->patch('/book', 'books/update.php');
+$router->get('/book/edit', [BookController::class, 'edit']);
+$router->patch('/book', [BookController::class, 'update']);
 
-$router->delete('/book', 'books/destroy.php');
+$router->delete('/book', [BookController::class, 'destroy']);
