@@ -1,8 +1,9 @@
 <?php
 
 use \controllers\BookController;
+use controllers\HomeController;
 
-$router->get('/', 'index.php');
+$router->get('/', [HomeController::class, 'index']);
 
 $router->get('/books', [BookController::class, 'index']);
 

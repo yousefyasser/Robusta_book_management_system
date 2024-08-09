@@ -38,3 +38,9 @@ function base_path($path)
 {
     return BASE_PATH . $path;
 }
+
+function view(string $viewName, array $viewVariables = [])
+{
+    extract($viewVariables);
+    return require(base_path("views/{$viewName}.view.php"));
+}

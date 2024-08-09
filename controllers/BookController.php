@@ -8,47 +8,65 @@ use core\Validator;
 
 class BookController
 {
+    public $bookRepo;
+
+    public function __construct()
+    {
+        $this->bookRepo = Database::get_book_repository();
+    }
+
     public function index()
     {
-        $books = Database::get_book_repository()->get_books();
+        $books = $this->bookRepo->get_books();
 
-        require(base_path('views/books/index.view.php'));
+        view('books/index', [
+            'books' => $books
+        ]);
     }
 
     public function create()
     {
-        $uri = '/books/create';
-        $heading = 'Add New';
-        require(base_path('views/books/create.view.php'));
+        view('books/form', [
+            'formType' => 'create'
+        ]);
     }
 
     public function show()
     {
-        $book = Database::get_book_repository()->find($_GET['id'] ?? INF);
+        $book = $this->bookRepo->find($_GET['id'] ?? INF);
 
         $showHistory = isset($_GET['showHistory']) && $_GET['showHistory'] === 'True';
 
         if ($showHistory) {
             $historyData = Database::get_book_history_repository()->get_book_history($_GET['id']);
-            require(base_path('views/books/show_history.view.php'));
+
+            view('books/show_history', [
+                'showHistory' => $showHistory,
+                'historyData' => $historyData,
+                'book' => $book
+            ]);
         }
 
-        require(base_path('views/books/show.view.php'));
+        view('books/show', [
+            'book' => $book
+        ]);
     }
 
     public function store()
     {
         $errors = Validator::get_validation_errors();
         if (!empty($errors)) {
-            $heading = 'Add New';
-            return require(base_path('views/books/create.view.php'));
+            return view('books/form', [
+                'errors' => $errors,
+                'formType' => 'create'
+            ]);
         }
 
         if (!is_dir(base_path('public/uploads'))) {
             mkdir(base_path('public/uploads'));
         }
 
-        $dstPath = !empty($_FILES['cover_image']['name']) ? move_file() : NULL;
+        $dstPath = move_file();
 
         $newBookData = [
             'title' => $_POST['title'],
@@ -58,19 +76,19 @@ class BookController
             'summary' => $_POST['summary']
         ];
 
-        Database::get_book_repository()->create($newBookData);
+        $this->bookRepo->create($newBookData);
 
         Router::redirect('/books');
     }
 
     public function edit()
     {
-        $uri = "/book";
-        $heading = 'Edit';
+        $book = $this->bookRepo->find($_GET['id'] ?? $_POST['id']);
 
-        $book = Database::get_book_repository()->find($_GET['id'] ?? $_POST['id']);
-
-        require(base_path('views/books/edit.view.php'));
+        view('books/form', [
+            'formType' => 'edit',
+            'book' => $book
+        ]);
     }
 
     public function update()
@@ -78,7 +96,10 @@ class BookController
         $errors = Validator::get_validation_errors();
 
         if (!empty($errors)) {
-            return require(base_path('controllers/books/edit.php'));
+            return view('books/form', [
+                'formType' => 'edit',
+                'errors' => $errors
+            ]);
         }
 
         if (!is_dir(base_path("public/uploads"))) {
@@ -88,7 +109,7 @@ class BookController
         $dstPath = move_file();
 
         // Remove old cover image
-        $oldCoverImagePath = Database::get_book_repository()->find($_POST['id'], true);
+        $oldCoverImagePath = $this->bookRepo->find($_POST['id'], true);
 
         if (valid_path($oldCoverImagePath['cover_image'])) {
             unlink(base_path("public/{$oldCoverImagePath['cover_image']}"));
@@ -104,20 +125,20 @@ class BookController
             "summary" => $_POST['summary']
         ];
 
-        Database::get_book_repository()->update($updatedBook['id'], $updatedBook);
+        $this->bookRepo->update($updatedBook['id'], $updatedBook);
 
         Router::redirect('/books');
     }
 
     public function destroy()
     {
-        $coverImagePath = Database::get_book_repository()->find($_POST['id'], true);
+        $coverImagePath = $this->bookRepo->find($_POST['id'], true);
 
         if (valid_path($coverImagePath['cover_image'])) {
             unlink(base_path("public/{$coverImagePath['cover_image']}"));
         }
 
-        Database::get_book_repository()->delete($_POST['id']);
+        $this->bookRepo->delete($_POST['id']);
 
         Router::redirect('/books');
     }
