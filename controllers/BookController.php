@@ -5,6 +5,7 @@ namespace controllers;
 use models\Database;
 use core\Router;
 use core\Validator;
+use core\FileManager;
 
 class BookController
 {
@@ -55,6 +56,7 @@ class BookController
     public function store()
     {
         $errors = Validator::get_validation_errors();
+
         if (!empty($errors)) {
             return view('books/form', [
                 'errors' => $errors,
@@ -62,11 +64,7 @@ class BookController
             ]);
         }
 
-        if (!is_dir(base_path('public/uploads'))) {
-            mkdir(base_path('public/uploads'));
-        }
-
-        $dstPath = move_file();
+        $dstPath = FileManager::move_file('cover_image');
 
         $newBookData = [
             'title' => $_POST['title'],
@@ -97,25 +95,16 @@ class BookController
 
         if (!empty($errors)) {
             return view('books/form', [
-                'formType' => 'edit',
-                'errors' => $errors
+                'errors' => $errors,
+                'formType' => 'edit'
             ]);
         }
 
-        if (!is_dir(base_path("public/uploads"))) {
-            mkdir(base_path("public/uploads"));
-        }
-
-        $dstPath = move_file();
-
-        // Remove old cover image
         $oldCoverImagePath = $this->bookRepo->find($_POST['id'], true);
+        FileManager::delete_file($oldCoverImagePath['cover_image']);
 
-        if (valid_path($oldCoverImagePath['cover_image'])) {
-            unlink(base_path("public/{$oldCoverImagePath['cover_image']}"));
-        }
+        $dstPath = FileManager::move_file('cover_image');
 
-        // Update book in database
         $updatedBook = [
             "id" => $_POST['id'],
             "title" => $_POST['title'],
@@ -134,9 +123,7 @@ class BookController
     {
         $coverImagePath = $this->bookRepo->find($_POST['id'], true);
 
-        if (valid_path($coverImagePath['cover_image'])) {
-            unlink(base_path("public/{$coverImagePath['cover_image']}"));
-        }
+        FileManager::delete_file($coverImagePath['cover_image']);
 
         $this->bookRepo->delete($_POST['id']);
 
