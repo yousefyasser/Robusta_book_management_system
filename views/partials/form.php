@@ -1,3 +1,13 @@
+<?php
+if ($formType === 'create') {
+    $heading = 'Create';
+    $uri = '/books/create';
+} else {
+    $heading = 'Edit';
+    $uri = '/book';
+}
+?>
+
 <main class="flex-grow">
     <section class="py-20">
         <div class="container mx-auto text-center">

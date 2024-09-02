@@ -17,11 +17,12 @@
                                 <p class="text-gray-600 mb-4"><span class="font-semibold">Publishing Date:</span> <?= $book['publishing_date'] ?></p>
                             </div>
                             <div class="flex space-x-2 mb-4 md:mb-0">
-                                <a href="/book/edit?id=<?= $book['id'] ?>" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Edit</a>
-                                <form action="/book" method="POST">
+                                <a href="/book?showHistory=True&id=<?= $book['id'] ?>" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold my-auto h-10 py-2 px-4 rounded-lg transition-colors">View history</a>
+                                <a href="/book/edit?id=<?= $book['id'] ?>" class="inline-block bg-green-500 hover:bg-green-700 text-white font-bold my-auto h-10 py-2 px-4 rounded-lg transition-colors">Edit</a>
+                                <form action="/book" method="POST" class="my-auto">
                                     <input type="hidden" name="_method" value="DELETE" />
                                     <input type="hidden" name="id" value="<?= $book['id'] ?>" />
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this book?');" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this book?');" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold h-10 py-2 px-4 rounded-lg transition-colors">Delete</button>
                                 </form>
                             </div>
                         </div>

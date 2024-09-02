@@ -2,6 +2,7 @@
 
 use Dotenv\Dotenv;
 use core\Router;
+use models\Database;
 
 const BASE_PATH = __DIR__ . '/../';
 
@@ -12,6 +13,9 @@ require(base_path('vendor/autoload.php'));
 
 $dotenv = Dotenv::createImmutable(BASE_PATH);
 $dotenv->load();
+
+// Book History Repository Subscription to Book Repository
+Database::get_book_repository()->subscribe(Database::get_book_history_repository());
 
 // Routes
 

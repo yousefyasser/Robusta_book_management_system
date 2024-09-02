@@ -2,50 +2,35 @@
 
 namespace models;
 
-use core\Router;
-use PDO;
+use models\factories\MongodbFactory;
+use models\factories\MysqlFactory;
+use Exception;
 
 class Database
 {
-    public $connection;
-    public $statement;
-
-    public function __construct($config, $username = 'root', $password = '')
+    public static function get_book_repository()
     {
-        $dsn = 'mysql:' . http_build_query($config, '', ';');
-
-        $this->connection = new PDO($dsn, $username, $password, [
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]);
+        return self::get_factory()->create_book_repository();
     }
 
-    public function query($query, $params = [])
+    public static function get_book_history_repository()
     {
-        $this->statement = $this->connection->prepare($query);
-
-        $this->statement->execute($params);
-
-        return $this;
+        return self::get_factory()->create_book_history_repository();
     }
 
-    public function get()
+    private static function get_factory()
     {
-        return $this->statement->fetchAll();
-    }
-
-    public function fetchOrFail()
-    {
-        $item = $this->statement->fetch();
-        if (!$item) {
-            Router::abort();
+        switch ($_ENV['DB_CONNECTION']) {
+            case 'mysql':
+                $dbFactory = new MysqlFactory();
+                break;
+            case 'mongodb':
+                $dbFactory = new MongodbFactory();
+                break;
+            default:
+                throw new Exception('Database connection not supported');
         }
 
-        return $item;
-    }
-
-    public static function setup()
-    {
-        $dbConfig = require(base_path('config.php'));
-        return (new Database($dbConfig['db'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']));
+        return $dbFactory;
     }
 }
